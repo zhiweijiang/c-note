@@ -2,11 +2,12 @@
 #include <stdlib.h>
 #include <time.h>
 
-#define N 100
+#define N 10000
 
 void init_aaray(int p[],int n);
 void butte_aaray(int p[],int n);
 void print_aaray(int p[],int n);
+void quick_sort(int p[],int x, int y);
 
 
 int main(int argc, const char *argv[])
@@ -16,9 +17,12 @@ int main(int argc, const char *argv[])
    init_array(array,N);
    puts("The original:");
    print_array(array,N);
-   butte_array(array,N);
-   puts("The sorted:");
-     print_array(array,N);
+//   butte_array(array,N);
+//   puts("The sorted:");
+//   print_array(array,N);
+   quick_sort(array,0, N-1);
+   puts("The quick_sorted:");
+   print_array(array,N);
     printf("\n");
     return 0;
 }
@@ -31,7 +35,7 @@ void init_array(int p[], int n)
 
     for (i = 0; i < n; i++) 
     {
-        p[i] = (rand()%200);
+        p[i] = (rand()%(2*N));
     }
 }
 
@@ -46,7 +50,7 @@ void print_array(int p[], int n)
         {
             printf("\n");
         }
-            printf("%4d",p[i]); 
+            printf("%7d",p[i]); 
     }
     printf("\n");
 }
@@ -68,5 +72,36 @@ void butte_array(int p[], int n)
             p[j] =temp;
             }
         }
+    }
+}
+
+
+
+void quick_sort(int p[], int x, int y)
+{
+    int i = x;
+    int j = y;
+    int mid =p[(x+y)/2];//Any a value
+    int temp = 0;
+    while(i<=j)
+    {
+           while(p[i] < mid) i++;
+           while(p[j] > mid) j--;
+           if(i<=j)  //'='control while quite
+           {
+                temp = p[i];
+                p[i] = p[j];
+                p[j] = temp;
+                 i++;
+                 j--;
+            }
+    }
+    if(x<j)
+    {
+       quick_sort(p,x,j);
+    }
+    if(i<y)
+    {
+       quick_sort(p,i,y);
     }
 }
