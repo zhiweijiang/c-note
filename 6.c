@@ -5,6 +5,7 @@ int main(int argc, const char *argv[])
     
     char str[20] = "This is a C world!";
     char *p = str;
+    char *p1= str;
     char c_str[20];
     char *p_c = c_str;
 
@@ -18,18 +19,20 @@ int main(int argc, const char *argv[])
        putchar(*p);  
     }
     printf("\n");
-    p=str;
+    p=p1=str;
     while(*p != '\0')
-    {
-        if (*p!=' ')
-       {
-       *p_c++=*p++;
-       }
-       else 
+    { 
+       while(*p1 == ' ') p1++;
+        if (p != p1)
+         {
+            *p = *p1;
+         }
+       p1++;
        p++;
    }
-    *p_c='\0';
-   puts(c_str);
+
+   *p = '\0';
+   puts(str);
 
     return 0;
 }
