@@ -4,9 +4,9 @@
 
 #define N 10000
 
-void init_aaray(int p[],int n);
-void butte_aaray(int p[],int n);
-void print_aaray(int p[],int n);
+void init_array(int p[],int n);
+void butte_array(int p[],int n);
+void print_array(int p[],int n);
 void quick_sort(int p[],int x, int y);
 
 
