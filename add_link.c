@@ -14,6 +14,7 @@ typedef struct node V_NODE;
 V_NODE *create_link(int n);
 void print_link(V_NODE *p);
 V_NODE * add_link(V_NODE * head);
+V_NODE * delete_link(V_NODE *head);
 
 
 int main(int argc, const char *argv[])
@@ -26,6 +27,8 @@ int main(int argc, const char *argv[])
     head = create_link(n);
     print_link(head);    
     head = add_link(head);
+    print_link(head);
+    head = delete_link(head);
     print_link(head);
 
     return 0;
@@ -113,4 +116,42 @@ V_NODE * add_link(V_NODE * head)
     return head;
 
 
+}
+
+
+V_NODE * delete_link(V_NODE *head)
+{  
+    int num = 0;
+    V_NODE *p = head;
+    V_NODE *q = NULL;
+
+    if(!head)
+    {
+        printf("empty link!\n");
+        return NULL;
+    }
+    printf("Please input of node to detele:");
+    scanf("%d", &num);
+    if(num == head->number)
+    {
+        head = head ->next;
+        free(p);
+        return head;
+    }
+    while((p->next)&&(num!=p->next->number))
+    {   
+        p = p->next;
+    }
+    if(p->next == NULL)
+    {
+        printf("No number match!\n");
+    }
+    else
+    {
+        q = p->next;
+        p->next = p->next->next;
+        free(q);
+    }
+
+    return head;
 }
