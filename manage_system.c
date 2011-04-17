@@ -10,6 +10,7 @@ struct node
 };
 
 typedef struct node V_NODE;
+
 V_NODE *add_link(V_NODE *head);
 V_NODE *delete_link(V_NODE *head);
 void print_link(V_NODE *p);
