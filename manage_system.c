@@ -48,12 +48,12 @@ int main(int argc, const char *argv[])
 
 int get_choice()
 {
-    int n;
+    char choice[20];
 
     printf("Please choose a number(1-4):");
-    scanf("%d", &n);
-    
-    return n;
+    scanf("%s", choice);
+
+    return atoi(choice);
 }
 
 void print_list()
@@ -107,9 +107,13 @@ V_NODE *delete_link(V_NODE *head)
     V_NODE * ptr = NULL;
     V_NODE *p = head;
     int num = 0;
-
+    if(!p)
+    {
+        printf("Empty link,please create a link!\n");
+        return head;
+    } 
     printf("Please input delete number:");
-    scanf("%d", &num);
+    scanf("%d", &num); 
     if(p->number == num)
     {
         head = p->next;
