@@ -16,12 +16,15 @@ V_NODE *delete_link(V_NODE *head);
 void print_link(V_NODE *p);
 void print_list();
 int  get_choice();
+void save_link(V_NODE *p);
+V_NODE *load_link(void);
 
 int main(int argc, const char *argv[])
 {
     V_NODE *head = NULL;
     int flag = 0;
-
+    
+    head = load_link();
     while(!flag)
     {
        
@@ -39,6 +42,7 @@ int main(int argc, const char *argv[])
                 break;
             case 4:
                 flag = 1 ;
+                save_link(head);
                 break;
             default :
                 break;
@@ -63,7 +67,7 @@ void print_list()
     printf("*\t1.add_link              *\n");
     printf("*\t2.delete_link           *\n");
     printf("*\t3.print_link            *\n");
-    printf("*\t4.exit                  *\n");
+    printf("*\t4.save and exit         *\n");
     printf("*********************************\n");
 }
 
@@ -150,4 +154,65 @@ void print_link(V_NODE *p)
         printf("number: %d\tname: %s\n", p->number, p->name);
         p = p->next;
     }
+}
+
+void save_link(V_NODE *p)
+{
+    FILE *fp;
+    fp = fopen("text", "w+");
+    if(fp == NULL)
+    {
+        perror("open");
+        exit(0);
+    }
+    while(p != NULL)
+    {
+        fprintf(fp, "%d\t%s\n", p->number, p->name);
+        p = p->next;
+    }
+    fclose(fp);
+}
+
+V_NODE *load_link(void)
+{
+    FILE *fp;
+    int num;
+    char na[20];
+    V_NODE *head = NULL;
+    V_NODE *p;
+
+    fp = fopen("text", "r+");
+    if(fp == NULL)
+    {
+        perror("open");
+        exit(0);
+    }
+    if(fscanf(fp, "%d%s", &num, na)!= EOF)
+    {   
+        printf("text:\n");
+        p = malloc(sizeof(V_NODE));
+        if(p == NULL)
+        {
+            perror("open");
+            exit(0);
+        }
+        p->number = num;
+        strcpy(p->name, na);
+        p->next = NULL;
+        head = p;
+    }
+    while(fscanf(fp, "%d%s", &num, na) != EOF)
+    {
+        p->next = malloc(sizeof(V_NODE));
+        if(p->next == NULL)
+        {
+            perror("open");
+            exit(0);
+        }
+        p->next->number = num;
+        strcpy(p->next->name, na);
+        p->next->next = NULL;
+        p = p->next;
+    }
+    return head;
 }
