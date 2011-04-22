@@ -18,12 +18,14 @@ void print_list();
 int  get_choice();
 void save_link(V_NODE *p);
 V_NODE *load_link(void);
+void print_test(void);
 
 int main(int argc, const char *argv[])
 {
     V_NODE *head = NULL;
     int flag = 0;
     
+    print_test();
     head = load_link();
     while(!flag)
     {
