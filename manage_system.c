@@ -191,7 +191,6 @@ V_NODE *load_link(void)
     }
     if(fscanf(fp, "%d%s", &num, na)!= EOF)
     {   
-        printf("text:\n");
         p = malloc(sizeof(V_NODE));
         if(p == NULL)
         {
