@@ -1,13 +1,13 @@
-#this is for chess game
+# This is for chess game
 
-scr = main.c init_screen.c basic_shapes.c print_board.c mouse_op.c
-para = -o main -Wall
+src=main.c init_op.c basic_shapes.c print_board.c mouse_op.c
+para=-o main -Wall
 
-main:$(scr)
-		gcc $(scr) $(para)
+main:$(src)
+	gcc $(src) $(para)
 clean:
-		rm -rf main
-		rm -rf *.o
-		rm -rf ~*
+	rm -rf main
+	rm -rf *.o
+	rm -rf ~*
 run:
-		./main
+	./main
