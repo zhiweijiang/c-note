@@ -7,4 +7,4 @@ main:$(scr)
 clean:
 		rm -rf *.o
 		rm -rf main
-		rm -rf -*
+		rm -rf ~*
