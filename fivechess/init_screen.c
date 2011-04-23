@@ -4,6 +4,7 @@
 #include <sys/ioctl.h>
 #include <stdlib.h>
 #include <sys/mman.h>
+#include <unistd.h>
 #include "main.h"
 
 fbscr_t fb_v;
@@ -37,18 +38,18 @@ int init_screen(void)
         perror("map");
         exit(0);
     }
-    int i = 0;
-    int j = 0;
-    for (j = 0; j < 100; j++) 
-    {
-        for (i = 0; i < 100; i++) 
+/*    int i = 0;
+  *  int j = 0;
+   * for (j = 0; j < 100; j++) 
+    *{
+     *   for (i = 0; i < 100; i++) 
         {
             p[j*fb_v.w+i] = 0x0000000ff;
         }
-    }
+    }*/
     fb_v.memo = p;
 
-  //  close();
+    close(fd);
     return 0;
 }
 
