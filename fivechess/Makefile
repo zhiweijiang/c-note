@@ -1,6 +1,6 @@
 #this is for chess game
 
-scr = main.c init_screen.c basic_shapes.c
+scr = main.c init_screen.c basic_shapes.c print_board.c mouse_op.c
 para = -o main -Wall
 
 main:$(scr)
