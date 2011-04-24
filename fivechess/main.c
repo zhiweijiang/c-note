@@ -12,9 +12,9 @@ int main(int argc, const char *argv[])
     //fb_line(300, 300, 200, 767, 0x0000ff22);
     //fb_line(400, 700, 0, 300, 0x0000ffaa);
     //fb_circle(600, 150, 100, 0x00aa00cc);
-    fb_circle_s(500, 600, 150, 0x000ff000);
+    // fb_circle_s(500, 600, 150, 0x000ff000);
 
-    //print_board(0x00ffffff);
+//    print_board(0x00ffffff);
 
     //int i;
     //for (i = 0; i < 1000; i++) 
