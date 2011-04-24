@@ -20,7 +20,7 @@ int check_one(int x, int y)
     int counter = 0;
     int who = 0;
     int m[4] = {1,0,1,1};
-    int n[4] = {0,1,1,1};
+    int n[4] = {0,1,-1,1};
     int sx = x;
     int sy = y;
     
@@ -38,7 +38,7 @@ int check_one(int x, int y)
         {
             x += m[j];
             y += n[j];
-            if(chess_board[x+i+y*B_X] == who)
+            if(chess_board[x+y*B_X] == who)
             {
                 counter ++;
             }

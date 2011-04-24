@@ -4,6 +4,8 @@
 
 extern fbsrc_t fb_v;
 extern char chess_board[B_X*B_Y];
+extern u32_t current_color;
+extern char current_player;
 
 int print_board(void)
 {
@@ -12,6 +14,8 @@ int print_board(void)
     
     memset((u32_t *)fb_v.memo, 0, fb_v.w*fb_v.h*fb_v.bpp/8);
     memset(chess_board, 0, B_X*B_Y);
+    current_color = BLACK;
+    current_player = 1;
     for(j = 10; j < ST_Y+(SPACE*B_Y); j++)
     {
         for(i = 20; i < ST_X+(SPACE*B_X); i++)
