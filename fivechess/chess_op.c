@@ -98,6 +98,7 @@ int  chess_do(void)
     
     int lx = 0;
     int ly = 0;
+    int i= 0;
     
     int winner = 0;
 
@@ -157,7 +158,38 @@ int  chess_do(void)
     winner = check_win();
     if(winner >0)
     {
-        printf("player %d won!\n", winner);
+        if(winner == 1)
+           {
+           for (i = 0; i < 2; i++) 
+            {    
+              fb_line(26+i,502,30+i,500,0x00ff0000);
+              fb_line(30+i,500,30+i,530,0x00ff0000);
+              fb_line(26,530-i,34,530-i,0x00ff0000);
+            }
+           }
+        else
+        {
+        for (i = 0; i < 2; i++) 
+        {
+        fb_circle_s(25,505+i,5,0x00ff0000);
+        fb_line(20+i,530,30+i,505,0x00ff0000);
+        fb_line(20,530-i,30,530-i,0x00ff0000);
+        }
+        }
+        for (i = 0; i < 2; i++) 
+        {
+        fb_line(40+i,500,45+i,530,0x00ff0000);
+        fb_line(45+i,530,50+i,500,0x00ff0000);
+        fb_line(50+i,500,55+i,530,0x00ff0000);
+        fb_line(55+i,530,60+i,500,0x00ff0000);
+        fb_circle(68,503,2,0x00ff0000);
+        fb_line(67+i,508,67+i,530,0x00ff0000);
+        fb_line(74+i,510,74+i,530,0x00ff0000);
+        fb_line(94-i,510,94-i,530,0x00ff0000);
+        fb_circle_s(84,510+i,10,0x00ff0000);
+        }
+        
+
         return winner;
     }
    

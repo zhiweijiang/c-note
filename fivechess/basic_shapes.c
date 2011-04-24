@@ -75,7 +75,7 @@ int fb_line(int x1, int y1, int x2, int y2, u32_t color)
     return 0;
 }
 
-int fb_circle(int x0, int y0, int r, u32_t color)
+int fb_circle_s(int x0, int y0, int r, u32_t color)
 {
     int x = 0;
     int y = r;
@@ -83,19 +83,19 @@ int fb_circle(int x0, int y0, int r, u32_t color)
 
     while (x <= y) 
     {
-       //fb_one_pixel(x0+x, y0+y, color);  //22
-       // fb_one_pixel(x0+x, y0-y, color);  //11
-       // fb_one_pixel(x0-x, y0-y, color);  //42
+       // fb_one_pixel(x0+x, y0+y, color);  //22
+          fb_one_pixel(x0+x, y0-y, color);  //11
+          fb_one_pixel(x0-x, y0-y, color);  //42
        // fb_one_pixel(x0-x, y0+y, color);  //31
        // fb_one_pixel(x0+y, y0+x, color);  //21
-       // fb_one_pixel(x0+y, y0-x, color);  //12
-       // fb_one_pixel(x0-y, y0-x, color);  //41
+          fb_one_pixel(x0+y, y0-x, color);  //12
+          fb_one_pixel(x0-y, y0-x, color);  //41
        // fb_one_pixel(x0-y, y0+x, color);  //32
 
-        fb_line(x0+x, y0+y, x0-x, y0+y, color);
-        fb_line(x0+y, y0+x, x0-y, y0+x, color);
-        fb_line(x0+x, y0-y, x0-x, y0-y, color);
-        fb_line(x0+y, y0-x, x0-y, y0-x, color);
+      //  fb_line(x0+x, y0+y, x0-x, y0+y, color);
+      //  fb_line(x0+y, y0+x, x0-y, y0+x, color);
+      //  fb_line(x0+x, y0-y, x0-x, y0-y, color);
+      //  fb_line(x0+y, y0-x, x0-y, y0-x, color);
 
         if (p < 0) 
         {
@@ -112,7 +112,7 @@ int fb_circle(int x0, int y0, int r, u32_t color)
     return 0;
 }
 
-int fb_circle_s(int x0, int y0, int r, u32_t color)
+int fb_circle(int x0, int y0, int r, u32_t color)
 {
     int x = 0;
     int y = r;
