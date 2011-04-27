@@ -38,7 +38,7 @@ int check_one(int x, int y)
         {
             x += m[j];
             y += n[j];
-            if(chess_board[x+y*B_X] == who)
+            if((chess_board[x+y*B_X] == who) && x<B_X)
             {
                 counter ++;
             }
