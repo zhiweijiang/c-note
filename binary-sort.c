@@ -3,9 +3,17 @@
 #include <time.h>
 #define N 10 
 
-int b_num(int num);
+int binary_num(int num);
 void init_num(int a[], int n);
 void sort_num(int a[], int n);
+
+struct num 
+{
+  int num;
+  int b_num;
+};
+
+typedef struct num NUM;
 
 int main(int argc, const char *argv[])
 {
@@ -30,7 +38,7 @@ int main(int argc, const char *argv[])
 }
 
 
-int b_num(int num)
+int binary_num(int num)
 {
     unsigned int mask = 0x01;
     int i = 0;
@@ -49,24 +57,37 @@ void sort_num(int a[], int n)
 {
     int i, j;
     int k, tmp = 0;
+    NUM num[n];
     
+    for (i = 0; i < n; i++) 
+    {
+        num[i].num = a[i];
+    }
+    for (i = 0; i < n; i++) 
+    {
+        num[i].b_num=binary_num(a[i]);
+    }
     for (i = 0; i < n-1; i++) 
     {   
         k = i;
         for (j = i+1; j < n; j++) 
         {       
             
-            if((b_num(a[j])<b_num(a[k])) || ((b_num(a[j])==b_num(a[k]))&&a[j]<a[k]))
+            if((num[j].b_num<num[k].b_num) || ((num[j].b_num == num[k].b_num)&&num[j].num<num[k].num))
             {
             k = j;
             }
         }
         if(k != i)
         {
-        tmp = a[k];
-        a[k] = a[i];
-        a[i] =tmp;
+        tmp = num[k].num;
+        num[k].num = num[i].num;
+        num[i].num =tmp;
         }
+    }
+    for (i = 0; i < n; i++) 
+    {
+        a[i] = num[i].num;
     }
 }
 
@@ -77,6 +98,6 @@ void init_num(int a[], int n)
     srand(time(NULL));
     for (i = 0; i < n; i++) 
     {
-        a[i] = rand()%(4*n);
+        a[i] = rand()%(8*n)-4*n;
     }
 }
