@@ -1,13 +1,16 @@
-# This is for chess game
+CFLAG = -Wall -c -fPIC
+LDFLAG =-shared
+src = $(wildcard *.c)
+obj = $(patsubst %.c, %.o, $(src))
+CC = gcc    
+target = libfive.so
+all:$(obj)
+		$(CC) $(obj) $(LDFLAG) -o $(target)
+%.o:%.c
+		$(CC) $(CFLAG) -o $@ $<
 
-src=main.c init_op.c basic_shapes.c print_board.c mouse_op.c chess_op.c
-para=-o main -Wall
-
-main:$(src)
-	gcc $(src) $(para)
+.PHONY:clean
 clean:
-	rm -rf main
-	rm -rf *.o
-	rm -rf ~*
-run:
-	./main
+		rm -f *.o
+		rm -f $(target)
+
