@@ -4,11 +4,10 @@
 #include <sys/stat.h>
 #include <stdlib.h>
 
-void linuxmycp(char *src, char *des);
+void linuxmycp(const char *src, const char *des);
 
-int main(int argc, const char *argv[])
+int main(int argc, char *argv[])
 {
-
     if(argc != 3)
     {
         printf("please input 2 file name!!\n");
@@ -18,12 +17,13 @@ int main(int argc, const char *argv[])
     return 0;
 }
 
-void linuxmycp(char *src, char *des)
+void linuxmycp(const char *src, const char *des)
 {
     char buf[1024];
     int n;
-    FILE *fp1 = NULL;
-    FILE *fp2 = NULL;
+    int fp1;
+    int fp2;
+    
     fp1 = open(src, O_RDONLY);
     if(fp1 < 0)
     {
