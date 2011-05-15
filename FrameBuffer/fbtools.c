@@ -63,6 +63,18 @@ void fb_memset(void *addr, int c, size_t len)
     memset(addr, c, len);
 }
 
+int fb_one_pixel(PFBDEV pFbdev, int x, int y, u32_t color)
+{
+    int i;
+    u32_t *p = (u32_t *)pFbdev->fb_mem;
+    
+    i = x + y*pFbdev->fb_var.xres;
+
+    p[i] = color;
+
+    return 0;
+}
+
 #define DEBUG
 #ifdef DEBUG
 
@@ -76,6 +88,9 @@ int main(int argc, const char *argv[])
         perror("fb_open");
         return 0;
     }
+    
+    fb_memset((void *)(fbdev.fb_mem + fbdev.fb_mem_offset), 0, fbdev.fb_fix.smem_len);
+    fb_one_pixel(&fbdev, 200, 200, 0xff00000);
     fb_close(&fbdev);
 
     return 0;

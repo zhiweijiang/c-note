@@ -12,11 +12,15 @@ typedef struct fbdev
     char dev[20];
 }FBDEV, *PFBDEV;
 
+typedef unsigned int  u32_t;
+
 int fb_open(PFBDEV pFbdev);
 
 int fb_close(PFBDEV pFbdev);
 
 int get_display_depth(PFBDEV pFbdev);
+
+int fb_one_pixel(PFBDEV pFbdev, int x, int y, u32_t color);
 
 void fb_memset(void *addr, int c, size_t lenj);
 
