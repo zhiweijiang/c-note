@@ -65,7 +65,7 @@ int init_fb(pinfo_t fb)
     fb->w = fb_var.xres;
     fb->h = fb_var.yres;
     fb->bpp = fb_var.bits_per_pixel;
-    printf("w:%d\th:\tbpp:%d\n", fb->w, fb->h, fb->bpp);
+    printf("w:%d\th:%d\tbpp:%d\n", fb->w, fb->h, fb->bpp);
 
     fb->fbmem = mmap(NULL, ((fb->w)*(fb->h)*(fb->bpp)/8), PROT_READ | PROT_WRITE, MAP_SHARED, fd, 0);
     if(fb->fbmem == MAP_FAILED)
@@ -116,12 +116,22 @@ int mouse_test(pinfo_t fb)
         if(mouse_parse(fd, &mevent) == 0)
         {
             printf("dx = %d\tdy = %d\tdz = %d\t", mevent.dx, mevent.dy, mevent.dz);
-
+            
             mouse_restore(fb, m_x, m_y);
 
             m_x += mevent.dx;
             m_y += mevent.dy;
-
+            m_x=((m_x<0)? 0:m_x);
+            m_y=((m_y<0)? 0:m_y);
+            if(m_x > (fb->w - C_WIDTH))
+            {
+                m_x = fb->w -C_WIDTH;
+            }
+            if(m_y > (fb->h - C_HIGHT))
+            {
+                m_y = fb->h - C_HIGHT;
+            }
+ 
             mouse_draw(fb, m_x, m_y);
             printf("mx = %d\tmy = %d\n", m_x, m_y);
             
@@ -162,14 +172,14 @@ int mouse_open(const char *mdev)
 
 int mouse_parse(int fd, mevent_t *mevent)
 {
-      u8_t buf[READ_MOUSE];
+      char buf[READ_MOUSE];
       int n;
         
       if((n = read(fd, buf, READ_MOUSE)) > 0)
       {
           mevent->button = buf[0]&0x07;
           mevent->dx = buf[1];
-          mevent->dy = buf[2];
+          mevent->dy = -buf[2];
           mevent->dz = buf[3];
       }
       else
