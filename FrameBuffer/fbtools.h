@@ -22,6 +22,10 @@ int get_display_depth(PFBDEV pFbdev);
 
 int fb_one_pixel(PFBDEV pFbdev, int x, int y, u32_t color);
 
+int fb_line(PFBDEV pFbdev, int x1, int y1, int x2, int y2, u32_t color);
+
+int fb_cirle(PFBDEV pFbdev, int x0, int y0, int r, u32_t color);
+
 void fb_memset(void *addr, int c, size_t lenj);
 
 #endif
