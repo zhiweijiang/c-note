@@ -75,7 +75,7 @@ int init_fb(pinfo_t fb)
     }
 
     close(fd);
-
+    memset(fb->fbmem, 0, (fb->w)*(fb->h)*(fb->bpp)/8);
     return 0;
 }
 
@@ -164,10 +164,7 @@ int mouse_test(pinfo_t fb)
             {
                 m_y = fb->h - C_HIGHT;
             }
- 
-            mouse_draw(fb, m_x, m_y);
   //        printf("mx = %d\tmy = %d\n", m_x, m_y);
-            
             switch(mevent.button)
             {
                 case 1:
@@ -198,7 +195,7 @@ int mouse_test(pinfo_t fb)
                 {   
                     for (j = m_y -50; j < m_y + 50; j++) 
                     {
-                        for (i = (m_y-j-50)/2; i <= (50-j-m_y)/2; i++) 
+                        for (i = (m_y-j-50)/2; i <= (50+j-m_y)/2; i++) 
                         {
                             fb_pixel(fb, m_x+i/2, j, 0xff000);
                         }
@@ -225,6 +222,7 @@ int mouse_test(pinfo_t fb)
                 default:
                     break;
             }
+          mouse_draw(fb, m_x, m_y);
         }
             else
                 ;
@@ -266,15 +264,15 @@ static int mouse_save(const pinfo_t fb, int x, int y)
 {
     int i,j;
 
-    for (i = 0; i < C_WIDTH; i++) 
+    for (j = 0; j < C_HIGHT; j++) 
     {
-        for (j = 0; j < C_HIGHT; j++)
+        for (i = 0; i < C_WIDTH; i++)
         {
             save_cursor[i+j*C_WIDTH] = *(u32_t *)(fb->fbmem+((x+i)+(y+j)*fb->w)*fb->bpp/8);
         }
-
-        return 0;
     }
+    
+    return 0;
 }
 
 int mouse_draw(const pinfo_t fb, int x, int y)
@@ -302,7 +300,6 @@ int mouse_restore(const pinfo_t fb, int x, int y)
     {
         for (i = 0; i < C_WIDTH; i++)
         {
-            if(cursor_pixel[i+j*C_WIDTH] != T___)
                 fb_pixel(fb, x+i, y+j, save_cursor[i+j*C_WIDTH]);
         }
     }
