@@ -88,13 +88,47 @@ int fb_pixel(pinfo_t fb, int x, int y, u32_t color)
 
     return 0;
 }
+
+int fb_cirle(pinfo_t fb, int x0, int y0, int r, u32_t color)
+{
+    int x = 0;
+    int y = r;
+    int p = 3 - 2*r;
+    
+    while(y >= x)
+    {
+        fb_pixel(fb, x0+x, y0+y, color);
+        fb_pixel(fb, x0+y, y0+x, color);
+        fb_pixel(fb, x0-x, y0+y, color); 
+        fb_pixel(fb, x0+x, y0-y, color);
+        fb_pixel(fb, x0-y, y0+x, color);
+        fb_pixel(fb, x0-x, y0-y, color);
+        fb_pixel(fb, x0+y, y0-x, color);
+        fb_pixel(fb, x0-y, y0-x, color);
+        if(p >= 0)
+        {
+            y --;
+            p += (4*(x-y) + 10); 
+        }
+        else
+        {
+            p += (4*x + 6);
+        }
+        x++;
+    }
+    
+    return 0;
+}
+
+
 int mouse_test(pinfo_t fb)
 {
     int fd;
     mevent_t mevent;
     int m_x = fb->w/2;
     int m_y = fb->h/2;
-
+    int i,j;
+    int flag = 0;
 
     if((fd = mouse_open("/dev/input/mice")) < 0)
     {
@@ -115,10 +149,9 @@ int mouse_test(pinfo_t fb)
     {
         if(mouse_parse(fd, &mevent) == 0)
         {
-            printf("dx = %d\tdy = %d\tdz = %d\t", mevent.dx, mevent.dy, mevent.dz);
+  //        printf("dx = %d\tdy = %d\tdz = %d\t", mevent.dx, mevent.dy, mevent.dz);
             
             mouse_restore(fb, m_x, m_y);
-
             m_x += mevent.dx;
             m_y += mevent.dy;
             m_x=((m_x<0)? 0:m_x);
@@ -133,22 +166,62 @@ int mouse_test(pinfo_t fb)
             }
  
             mouse_draw(fb, m_x, m_y);
-            printf("mx = %d\tmy = %d\n", m_x, m_y);
+  //        printf("mx = %d\tmy = %d\n", m_x, m_y);
             
             switch(mevent.button)
             {
                 case 1:
-                    printf("lelf button\n");
+                {
+                    i = 50;
+                    while(i > 25)
+                    {
+                        fb_cirle(fb, m_x, m_y, i, 0x0fff);
+                        i--;
+                    }
+                    for (j = m_y -1; j < m_y+2; j++) 
+                    {
+                        for (i = m_x - 25; i < m_x + 25; i++) 
+                        {
+                            fb_pixel(fb, i, j, 0xff00);
+                        }
+                    } 
+                    for (j = m_y -25; j < m_y+25; j++) 
+                    {
+                        for (i = m_x - 1; i < m_x + 2; i++) 
+                        {
+                            fb_pixel(fb, i, j, 0xff00);
+                        }
+                    }   
                     break;
+                 }
                 case 2:
-                    printf("right button\n");
+                {   
+                    for (j = m_y -50; j < m_y + 50; j++) 
+                    {
+                        for (i = (m_y-j-50)/2; i <= (50-j-m_y)/2; i++) 
+                        {
+                            fb_pixel(fb, m_x+i/2, j, 0xff000);
+                        }
+                    }
+                    fb_cirle(fb, m_x, m_y, 250, 0x0fff); 
                     break;
+                 }
                 case 4:
-                    printf("middle button\n");
+                {
+                    flag = 1;
+                    for (j = m_y - 12; j < m_y + 12; j++) 
+                    {
+                        for (i = -75; i < 75; i++) 
+                        {
+                            fb_pixel(fb, m_x+i, j, 0x0ff);
+                        }
+                    }
                     break;
+                }
                 case 0:
-                    printf("no button\n");
-                    break;
+                    if(1 == flag)
+                        exit(0);
+                    break;   
                 default:
                     break;
             }
@@ -210,10 +283,9 @@ int mouse_draw(const pinfo_t fb, int x, int y)
 
     mouse_save(fb, x, y);
 
-    for (i = 0; i < C_WIDTH; i++) 
+    for (j = 0; j < C_HIGHT; j++) 
     {
-        for (j = 0; j < C_HIGHT; j++)
-        {
+        for (i = 0; i < C_WIDTH; i++) {
             if(cursor_pixel[i+j*C_WIDTH] != T___)
                 fb_pixel(fb, x+i, y+j, cursor_pixel[i+j*C_WIDTH]);
         }
@@ -226,9 +298,9 @@ int mouse_restore(const pinfo_t fb, int x, int y)
 {
     int i, j;
 
-    for (i = 0; i < C_WIDTH; i++) 
+    for (j = 0; j < C_HIGHT; j++) 
     {
-        for (j = 0; j < C_HIGHT; j++)
+        for (i = 0; i < C_WIDTH; i++)
         {
             if(cursor_pixel[i+j*C_WIDTH] != T___)
                 fb_pixel(fb, x+i, y+j, save_cursor[i+j*C_WIDTH]);
