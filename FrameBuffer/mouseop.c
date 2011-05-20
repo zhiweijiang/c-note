@@ -8,7 +8,7 @@ typedef struct
     int button;
 }mevent_t;
 
-static u32_t save_cursor[C_WIDTH*C_HIGHT];
+static u32_t save_cursor[C_WIDTH*C_HIGHT] = {0};
 
 
 extern int mouse_open(const char *mdev);
@@ -137,20 +137,19 @@ int mouse_test(pinfo_t fb)
     }
     mouse_draw(fb, m_x, m_y);
 
-    u8_t buf[] = {0xf3,0xc8,0xf3,0x64,0xf3,0x50};
+//  u8_t buf[] = {0xf3,0xc8,0xf3,0x64,0xf3,0x50};
 
-    if(write(fd, buf, sizeof(buf)) < sizeof(buf))
-    {
-        perror("write");
-        fprintf(stderr, "鼠标将不知支持滚轮\n");
-    }
-
-    while(1)
+//    if(write(fd, buf, sizeof(buf)) < sizeof(buf))
+//   {
+//        perror("write");
+//        fprintf(stderr, "鼠标将不知支持滚轮\n");
+//   }
+    fb_cirle(fb, m_x, m_y, 50, 0xff00);
+    while(!flag)
     {
         if(mouse_parse(fd, &mevent) == 0)
         {
   //        printf("dx = %d\tdy = %d\tdz = %d\t", mevent.dx, mevent.dy, mevent.dz);
-            
             mouse_restore(fb, m_x, m_y);
             m_x += mevent.dx;
             m_y += mevent.dy;
@@ -168,61 +167,59 @@ int mouse_test(pinfo_t fb)
             switch(mevent.button)
             {
                 case 1:
-                {
-                    i = 50;
-                    while(i > 25)
                     {
-                        fb_cirle(fb, m_x, m_y, i, 0x0fff);
-                        i--;
+                        i = 50;
+                        while(i > 25)
+                        {
+                            fb_cirle(fb, m_x, m_y, i, 0x0fff);
+                            i--;
+                        }
+                        for (j = m_y -1; j < m_y+2; j++) 
+                        {
+                            for (i = m_x - 25; i < m_x + 25; i++) 
+                            {
+                                fb_pixel(fb, i, j, 0xff00);
+                            }
+                        } 
+                        for (j = m_y -25; j < m_y+25; j++) 
+                        {
+                            for (i = m_x - 1; i < m_x + 2; i++) 
+                            {
+                                fb_pixel(fb, i, j, 0xff00);
+                            }
+                        }   
+                        break;
                     }
-                    for (j = m_y -1; j < m_y+2; j++) 
-                    {
-                        for (i = m_x - 25; i < m_x + 25; i++) 
-                        {
-                            fb_pixel(fb, i, j, 0xff00);
-                        }
-                    } 
-                    for (j = m_y -25; j < m_y+25; j++) 
-                    {
-                        for (i = m_x - 1; i < m_x + 2; i++) 
-                        {
-                            fb_pixel(fb, i, j, 0xff00);
-                        }
-                    }   
-                    break;
-                 }
                 case 2:
-                {   
-                    for (j = m_y -50; j < m_y + 50; j++) 
-                    {
-                        for (i = (m_y-j-50)/2; i <= (50+j-m_y)/2; i++) 
+                    {   
+                        for (j = m_y -50; j < m_y + 50; j++) 
                         {
-                            fb_pixel(fb, m_x+i/2, j, 0xff000);
+                            for (i = (m_y-j-50)/2; i <= (50+j-m_y)/2; i++) 
+                            {
+                                fb_pixel(fb, m_x+i/2, j, 0xff000);
+                            }
                         }
+                        fb_cirle(fb, m_x, m_y, 250, 0x0fff); 
+                        break;
                     }
-                    fb_cirle(fb, m_x, m_y, 250, 0x0fff); 
-                    break;
-                 }
                 case 4:
-                {
-                    flag = 1;
-                    for (j = m_y - 12; j < m_y + 12; j++) 
                     {
-                        for (i = -75; i < 75; i++) 
+                        flag = 1;
+                        for (j = m_y - 12; j < m_y + 12; j++) 
                         {
-                            fb_pixel(fb, m_x+i, j, 0x0ff);
+                            for (i = -75; i < 75; i++) 
+                            {
+                                fb_pixel(fb, m_x+i, j, 0x0ff);
+                            }
                         }
+                        break;
                     }
-                    break;
-                }
                 case 0:
-                    if(1 == flag)
-                        exit(0);
                     break;   
                 default:
                     break;
             }
-          mouse_draw(fb, m_x, m_y);
+            mouse_draw(fb, m_x, m_y);
         }
             else
                 ;
@@ -283,7 +280,8 @@ int mouse_draw(const pinfo_t fb, int x, int y)
 
     for (j = 0; j < C_HIGHT; j++) 
     {
-        for (i = 0; i < C_WIDTH; i++) {
+        for (i = 0; i < C_WIDTH; i++) 
+        {
             if(cursor_pixel[i+j*C_WIDTH] != T___)
                 fb_pixel(fb, x+i, y+j, cursor_pixel[i+j*C_WIDTH]);
         }
