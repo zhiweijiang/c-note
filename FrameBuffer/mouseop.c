@@ -144,7 +144,6 @@ int mouse_test(pinfo_t fb)
 //        perror("write");
 //        fprintf(stderr, "鼠标将不知支持滚轮\n");
 //   }
-    fb_cirle(fb, m_x, m_y, 50, 0xff00);
     while(!flag)
     {
         if(mouse_parse(fd, &mevent) == 0)
