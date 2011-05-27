@@ -33,14 +33,26 @@ void *consumer(void *p)
 void *producer(void *p)
 {
     struct msg *mp;
+    struct msg *q;
+
     for(;;)
     {
         mp = malloc(sizeof(struct msg));
         mp->num = rand()%1000 + 1;
         printf("Producer %d\n", mp->num);
         pthread_mutex_lock(&lock);
-        mp->next = head;
-        head = mp;
+        q = head;
+        if(q == NULL)
+        {
+            head = mp;
+            mp->next = NULL;
+        }
+        else
+        {
+            while(q->next != NULL)
+                q = q->next; mp->next = NULL; q->next = mp;
+        }
+     // head = mp;
         pthread_mutex_unlock(&lock);
         pthread_cond_signal(&has_product);
         sleep(rand()%5);
