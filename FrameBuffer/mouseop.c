@@ -129,6 +129,7 @@ int mouse_test(pinfo_t fb)
     int m_y = fb->h/2;
     int i,j;
     int flag = 0;
+    int mouse_flag = 0;
 
     if((fd = mouse_open("/dev/input/mice")) < 0)
     {
@@ -165,65 +166,75 @@ int mouse_test(pinfo_t fb)
   //        printf("mx = %d\tmy = %d\n", m_x, m_y);
             switch(mevent.button)
             {
-                case 1:
-                    {
-                        i = 50;
-                        while(i > 25)
-                        {
-                            fb_cirle(fb, m_x, m_y, i, 0x0fff);
-                            i--;
-                        }
-                        for (j = m_y -1; j < m_y+2; j++) 
-                        {
-                            for (i = m_x - 25; i < m_x + 25; i++) 
-                            {
-                                fb_pixel(fb, i, j, 0xff00);
-                            }
-                        } 
-                        for (j = m_y -25; j < m_y+25; j++) 
-                        {
-                            for (i = m_x - 1; i < m_x + 2; i++) 
-                            {
-                                fb_pixel(fb, i, j, 0xff00);
-                            }
-                        }   
-                        break;
-                    }
-                case 2:
-                    {   
-                        for (j = m_y -50; j < m_y + 50; j++) 
-                        {
-                            for (i = (m_y-j-50)/2; i <= (50+j-m_y)/2; i++) 
-                            {
-                                fb_pixel(fb, m_x+i/2, j, 0xff000);
-                            }
-                        }
-                        fb_cirle(fb, m_x, m_y, 250, 0x0fff); 
-                        break;
-                    }
-                case 4:
-                    {
-                        flag = 1;
-                        for (j = m_y - 12; j < m_y + 12; j++) 
-                        {
-                            for (i = -75; i < 75; i++) 
-                            {
-                                fb_pixel(fb, m_x+i, j, 0x0ff);
-                            }
-                        }
-                        break;
-                    }
                 case 0:
+                    switch(mouse_flag)
+                    {
+                        case 1:
+                            i = 50;
+                            while(i > 25)
+                            {
+                                fb_cirle(fb, m_x, m_y, i, 0x0fff);
+                                i--;
+                            }
+                            for (j = m_y -1; j < m_y+2; j++) 
+                            {
+                                for (i = m_x - 25; i < m_x + 25; i++) 
+                                {
+                                    fb_pixel(fb, i, j, 0xff00);
+                                }
+                            } 
+                            for (j = m_y -25; j < m_y+25; j++) 
+                            {
+                                for (i = m_x - 1; i < m_x + 2; i++) 
+                                {
+                                    fb_pixel(fb, i, j, 0xff00);
+                                }
+                            }   
+                            mouse_flag = 0;
+                            break;
+                        case 2:
+                            for (j = m_y -50; j < m_y + 50; j++) 
+                            {
+                              for (i = (m_y-j-50)/2; i <= (50+j-m_y)/2; i++) 
+                                {
+                                    fb_pixel(fb, m_x+i/2, j, 0xff000);
+                                }
+                            }
+                            fb_cirle(fb, m_x, m_y, 250, 0x0fff); 
+                            mouse_flag = 0;
+                            break;
+                        case 4:
+                            flag = 1;
+                            for (j = m_y - 12; j < m_y + 12; j++) 
+                            {
+                                for (i = -75; i < 75; i++) 
+                                {
+                                    fb_pixel(fb, m_x+i, j, 0x0ff);
+                                }
+                            }
+                            mouse_flag = 0;
+                            break;
+                        default:
+                            break;
+                    }
+                    break;
+                case 1:
+                    mouse_flag = 1;
                     break;   
+                case 2:
+                    mouse_flag = 2;
+                    break;
+                case 4:
+                    mouse_flag = 4;
+                    break;
                 default:
                     break;
             }
             mouse_draw(fb, m_x, m_y);
         }
-            else
-                ;
     }
     close(fd);
+
     return 0;
 }
 
